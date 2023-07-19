@@ -1,0 +1,27 @@
+.form {
+    background-color: #a0a0a0;
+    padding: 1rem;
+    width: 20rem;
+  }
+  
+  .form label {
+    display: block;
+    margin-bottom: 0.05rem;
+    color: #000000;
+    font-weight: bold;
+  }
+  
+  .form input {
+    display: block;
+    width: 100%;
+    font: inherit;
+    padding: 0.5rem;
+    border-radius: 6px;
+    border: none;
+    background-color: #f3f3f3;
+    color: #000000;
+  }
+
+  .form input:read-only {
+    background-color: #c9c9c9;
+  }
