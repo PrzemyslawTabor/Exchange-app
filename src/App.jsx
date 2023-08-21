@@ -1,19 +1,15 @@
 import React from 'react';
-import NavBar from './components/NavBar';
 import RootLayout from './components/RootLayout';
 import { Outlet } from 'react-router-dom';
-import ProtectedCreateWalletRoute from './utils/ProtectedRoute';
-
+import AuthNav from './features/authentication/AuthNav';
 import './app.css';
 
 const App = () => {
   return (
     <>
-    <Outlet />
-    <main>
-        <NavBar />
-        <RootLayout />
-    </main>
+      <Outlet />
+      <AuthNav />
+      <RootLayout />
     </>
   );
 };

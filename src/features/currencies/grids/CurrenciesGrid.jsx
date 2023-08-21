@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from "react-redux";
-import { getCurrencies } from '../store/currenciesSlice';
+import { getCurrencies } from '../../../store/currenciesSlice';
 import { useNavigate } from 'react-router-dom';
-import { setCurrencyToUpdate } from '../store/popUpCurrencySlice';
-import { createToken } from '../utils/tokenActions';
+import { setCurrencyToUpdate } from '../../../store/popUpCurrencySlice';
+import { createToken } from '../../authentication/tokenActions';
 
 const CurrenciesGrid = () => {
   const {currencies} = useSelector((state) => state.currencies);
@@ -22,7 +22,7 @@ const CurrenciesGrid = () => {
   const navigate = useNavigate();
   const buyCurrency = (currency) => {
     dispatch(setCurrencyToUpdate(currency));
-    navigate("/buy_currencies", {state: {token: createToken()}});
+    navigate("/buy-currencies", {state: {token: createToken()}});
   }
 
   if (Object.keys(currencies).length > 0) {

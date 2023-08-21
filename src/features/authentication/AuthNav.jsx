@@ -1,10 +1,9 @@
 import React from 'react';
+import AuthenticationButton from './AuthenticationButton';
 import { useAuth0 } from "@auth0/auth0-react";
 
-import AuthNav from './AuthNav';
-
-const NavBar = () => {
-  const { user, isAuthenticated, isLoading } = useAuth0();
+const AuthNav = () => {
+  const { user, isAuthenticated } = useAuth0();
 
   return (
     <>
@@ -15,10 +14,13 @@ const NavBar = () => {
               <p className="margin-md">Logged in as <b>{user.name}</b></p>
             </span>
         )}
-        <AuthNav />
+        <div className="nav-item">
+          <AuthenticationButton />
+        </div>
       </nav>
     </>
   );
+
 };
 
-export default NavBar;
+export default AuthNav;

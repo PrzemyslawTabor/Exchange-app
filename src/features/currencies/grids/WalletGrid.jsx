@@ -1,18 +1,17 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from "react-redux";
-import { getCurrencies } from '../store/currenciesSlice';
-import { getWallet } from '../store/walletSlice';
+import { getCurrencies } from '../../../store/currenciesSlice';
+import { getWallet } from '../../../store/walletSlice';
 import { useNavigate } from 'react-router-dom';
-import { setCurrencyToUpdate } from '../store/popUpCurrencySlice';
-import { createToken } from '../utils/tokenActions';
-import { calculateValue } from '../utils/currencyOperations';
+import { setCurrencyToUpdate } from '../../../store/popUpCurrencySlice';
+import { createToken } from '../../authentication/tokenActions';
+import { calculateValue } from '../currencyOperations';
 
 const WalletGrid = ({userId}) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const {currencies} = useSelector((state) => state.currencies);
   const {wallet} = useSelector((state) => state.wallet);
-
 
   useEffect(() => {
     const dataFetchCurrencies = async () => {
@@ -40,7 +39,7 @@ const WalletGrid = ({userId}) => {
 
     const sellCurrency = (currency) => {
       dispatch(setCurrencyToUpdate(currency));
-      navigate("/sell_currencies", {state: {token: createToken()}});
+      navigate("/sell-currencies", {state: {token: createToken()}});
     }
   
     let data = mergeByCode(currencies.items, wallet);
@@ -73,7 +72,7 @@ const WalletGrid = ({userId}) => {
                 {currency.amount}
               </td>
               <td scope="col-md-4">
-                {calculateValue(currency.amount, currency.purchasePrice, currency.code)}
+                {calculateValue(currency.amount, currency.purchasePrice, currency.unit)}
               </td>
               <td scope="col-md-5">
                 <button onClick={() => sellCurrency(currency)} className="btn btn-secondary btn-sm btn-block col-12">

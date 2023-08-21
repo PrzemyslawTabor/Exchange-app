@@ -1,11 +1,12 @@
 import { Link, useNavigate } from "react-router-dom";
 import { connect } from "react-redux";
-import classes from "./BuyCurrencies.module.css";
-import Modal from "../components/Modal";
-import { Field, reduxForm } from "redux-form";
-import { createWallet } from "../store/walletSlice";
+import classes from "../../../features/currencies/buy/BuyCurrencies.module.css";
+import Modal from "../../../components/modal/Modal";
+import { reduxForm } from "redux-form";
+import { createWallet } from "../../../store/walletSlice";
 import { useAuth0 } from "@auth0/auth0-react";
-import { isSpecialIncrementCurrency } from "../utils/currencyOperations";
+import { isSpecialIncrementCurrency } from "../currencyOperations";
+import InputField from "../../../components/fields/InputField";
 
 const validate = values => {
   const errors = {};
@@ -24,16 +25,6 @@ const validate = values => {
   return errors;
 }
 
-const renderField = ({ input, label, type, disabled, step, meta: { touched, error } }) => (
-  <div>
-    <label>{label}</label>
-    <div>
-      <input {...input} placeholder={label} type={type} disabled={disabled} step={step}/>
-      {touched && (error && <span>{error}</span>)}
-    </div>
-  </div>
-)
-
 function CreateInitialWallet(props) {
   const {
     handleSubmit,
@@ -50,11 +41,11 @@ function CreateInitialWallet(props) {
   }
 
   return (
-    <Modal>
+    <Modal redirect="/">
       <form onSubmit={handleSubmit(submitCreate)} className={classes.form}>
         {Object.keys(initialValues).map((item, index) => (
             <div key={index}>
-                <Field label={item} name={item} component={renderField} step={isSpecialIncrementCurrency(item) ? 100 : 1} type="number" disabled={false} />
+              <InputField item={item} disabled={false}/>
             </div>
         ))}
         <p className="mt-2">
@@ -67,7 +58,6 @@ function CreateInitialWallet(props) {
 }
 
 function mapStateToProps(state) {
-  console.log(state);
   const wallet = state.wallet.wallet;
   const { ['userId']: userId, ...splicedWallet } = wallet  
 
@@ -77,7 +67,7 @@ function mapStateToProps(state) {
 }
 
 CreateInitialWallet = reduxForm({
-  form: "sell_currencies",
+  form: "sell-currencies",
   enableReinitialize: true,
   validate,
 })(CreateInitialWallet)

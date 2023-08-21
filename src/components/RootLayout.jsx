@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from "react-redux";
 import { useAuth0 } from "@auth0/auth0-react";
-import LoginButton from './AuthNav';
-import CurrenciesGrid from './CurrenciesGrid';
-import WalletGrid from './WalletGrid';
-import CreateInitialWalletButton from './CreateInitialWalletButton';
+import CurrenciesGrid from '../features/currencies/grids/CurrenciesGrid';
+import WalletGrid from '../features/currencies/grids/WalletGrid';
+import CreateInitialWalletButton from '../features/currencies/initial/CreateInitialWalletButton';
 import { getWallet } from '../store/walletSlice';
+import AuthenticationButton from '../features/authentication/AuthenticationButton';
 
 const RootLayout = () => {
     const { user, isAuthenticated, isLoading } = useAuth0();
@@ -24,34 +24,38 @@ const RootLayout = () => {
       }
     }, [isAuthenticated])
 
-    return (
-        <>
-            {!isAuthenticated && !isLoading && (
-                <div className='mt-5'>
-                    <p>You need to login first to get the access to the site.</p>
-                    <LoginButton />
-                </div>
-            )}
-            {isLoading && (
+    if (!isAuthenticated) {
+        if (isLoading) {
+            return (
                 <div className='mt-5'>
                     <p>We are loading your data. Please hold on.</p>
                 </div>
-            )}
-            {isAuthenticated && wallet.userId === null && (
-                <div className='mt-5'>
-                    <p>You did not define your initial wallet yet. It is necessary to use this site.</p>
-                    <CreateInitialWalletButton />
-                </div>
-            )}
-            {isAuthenticated && wallet.userId !== null && (
-                <div className="d-flex justify-content-between">
-                    <CurrenciesGrid />
-                    <WalletGrid userId={user.sub}/>
-                </div>
-            )}
-            
-        </>
-    );
+            )
+        }
+
+        return (
+            <div className='mt-5'>
+                <p>You need to login first to get the access to the site.</p>
+                <AuthenticationButton />
+            </div>
+        )
+    }
+
+    if (wallet.userId === null) {
+        return (
+            <div className='mt-5'>
+                <p>You did not define your initial wallet yet. It is necessary to use this site.</p>
+                <CreateInitialWalletButton />
+            </div>
+        )
+    }
+
+    return (
+        <div className="d-flex justify-content-between">
+            <CurrenciesGrid />
+            <WalletGrid userId={user.sub}/>
+        </div>
+    )
 };
 
 export default RootLayout;
