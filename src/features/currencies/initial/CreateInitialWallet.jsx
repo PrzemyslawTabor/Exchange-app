@@ -4,9 +4,9 @@ import classes from "../../../features/currencies/buy/BuyCurrencies.module.css";
 import Modal from "../../../components/modal/Modal";
 import { reduxForm } from "redux-form";
 import { createWallet } from "../../../store/walletSlice";
-import { useAuth0 } from "@auth0/auth0-react";
 import { isSpecialIncrementCurrency } from "../currencyOperations";
 import InputField from "../../../components/fields/InputField";
+import { getAuth0User } from "../../authentication/auth0Actions";
 
 const validate = values => {
   const errors = {};
@@ -33,7 +33,7 @@ function CreateInitialWallet(props) {
   } = props
 
   const navigate = useNavigate();
-  const {user} = useAuth0();
+  const user = getAuth0User();
 
   const submitCreate = (values, dispatch) => {
     dispatch(createWallet({values: values, userId: user.sub}));

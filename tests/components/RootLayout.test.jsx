@@ -1,7 +1,7 @@
 import { screen, waitFor } from '@testing-library/react';
 import { beforeEach, vi } from 'vitest';
 import { useAuth0 } from "@auth0/auth0-react";
-import RootLayout from '../../src/components/RootLayout';
+import RootView from '../../src/components/RootView';
 import { renderWithProviders } from '../store/renderWithProviders';
 import { act } from 'react-dom/test-utils';
 import { testGetWallet, testUpdateWalletReducer } from '../../src/store/walletSlice';
@@ -18,7 +18,7 @@ describe('Root layout component, user not authenticated', () => {
     });
 
     test('User NOT authenticated, page still loading', async () => {
-        const { store } = renderWithProviders(<RootLayout />);
+        const { store } = renderWithProviders(<RootView />);
 
         const outputElement = screen.getByText('You need to login first to get the access to the site.');
         expect(outputElement).toBeInTheDocument();
@@ -31,7 +31,7 @@ describe('Root layout component, user not authenticated', () => {
             });
         });
 
-        const { store } = renderWithProviders(<RootLayout />);
+        const { store } = renderWithProviders(<RootView />);
         const outputElement = screen.getByText('We are loading your data. Please hold on.');
         expect(outputElement).toBeInTheDocument();
     })
@@ -51,7 +51,7 @@ describe('User authenticated', async () => {
 
     test('User authenticated, wallet for user NOT exist', async () => {
         await act(async () => {
-            const { store } = renderWithProviders(<RootLayout />);
+            const { store } = renderWithProviders(<RootView />);
         });
 
         const outputElement = screen.getByText('You did not define your initial wallet yet. It is necessary to use this site.');
@@ -65,7 +65,7 @@ describe('User authenticated', async () => {
             },
         };
 
-        const { store } = renderWithProviders(<RootLayout />);
+        const { store } = renderWithProviders(<RootView />);
         await act(async () => {
             store.dispatch(testGetWallet(initialState));
         });

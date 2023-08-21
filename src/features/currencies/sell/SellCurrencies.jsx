@@ -3,9 +3,9 @@ import { connect } from "react-redux";
 import classes from "../../../features/currencies/buy/BuyCurrencies.module.css";
 import Modal from "../../../components/modal/Modal"
 import { Field, reduxForm } from "redux-form";
-import { updateWallet } from "../../../store/walletSlice";
-import { useAuth0 } from "@auth0/auth0-react";
+import { sellCurrency } from "../../../store/walletSlice";
 import { isSpecialIncrementCurrency, calculateValue } from "../currencyOperations";
+import { getAuth0User } from "../../authentication/auth0Actions";
 
 const validate = values => {
   const errors = {};
@@ -57,10 +57,10 @@ function SellCurrencies(props) {
   } = props
 
   const navigate = useNavigate();
-  const {user} = useAuth0();
+  const user = getAuth0User();
 
   const submitSell = (values, dispatch) => {
-    dispatch(updateWallet({values: values, option: "sell", userId: user.sub}));
+    dispatch(sellCurrency({values: values, userId: user.sub}));
     navigate("/");
   }
 

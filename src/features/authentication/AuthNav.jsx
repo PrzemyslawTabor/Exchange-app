@@ -1,9 +1,9 @@
 import React from 'react';
 import AuthenticationButton from './AuthenticationButton';
-import { useAuth0 } from "@auth0/auth0-react";
+import { getAuth0Variables } from './auth0Actions';
 
 const AuthNav = () => {
-  const { user, isAuthenticated } = useAuth0();
+  const { user, isAuthenticated } = getAuth0Variables();
 
   return (
     <>

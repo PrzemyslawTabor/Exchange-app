@@ -1,9 +1,9 @@
 import React from 'react';
 import Button from '../../components/buttons/Button';
-import { useAuth0 } from '@auth0/auth0-react';
+import { getAuth0Variables } from './auth0Actions';
 
 const AuthenticationButton = () => {
-  const { isAuthenticated, logout, loginWithRedirect } = useAuth0();
+  const { isAuthenticated, logout, loginWithRedirect } = getAuth0Variables();
 
   return isAuthenticated 
     ? <Button type="btn-danger" onClick={() =>

@@ -8,8 +8,18 @@ export const getWallet = createAsyncThunk("wallet/getWallet", async (data) => {
     );
 })
 
-export const updateWallet = createAsyncThunk("wallet/updateWallet", async (data) => {
-    return fetch ("http://127.0.0.1:8080/wallet/update", {
+export const buyCurrency = createAsyncThunk("wallet/buy", async (data) => {
+    return fetch ("http://127.0.0.1:8080/wallet/buy", {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({data}),
+    }).then((response) => 
+        response.json(),
+    );
+})
+
+export const sellCurrency = createAsyncThunk("wallet/sell", async (data) => {
+    return fetch ("http://127.0.0.1:8080/wallet/sell", {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({data}),
@@ -53,11 +63,14 @@ const walletSlice = createSlice({
                 state.wallet = action.payload
             }
         });
-        builder.addCase(updateWallet.fulfilled, (state, action) => {
-            state.wallet = action.payload.wallet
-        });
         builder.addCase(createWallet.fulfilled, (state, action) => {
             state.wallet = action.payload
+        })
+        builder.addCase(buyCurrency.fulfilled, (state, action) => {
+            state.wallet = action.payload.wallet
+        })
+        builder.addCase(sellCurrency.fulfilled, (state, action) => {
+            state.wallet = action.payload.wallet
         })
         .addDefaultCase((state, action) => {})
     },

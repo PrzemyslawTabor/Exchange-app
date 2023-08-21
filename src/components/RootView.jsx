@@ -1,14 +1,14 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from "react-redux";
-import { useAuth0 } from "@auth0/auth0-react";
 import CurrenciesGrid from '../features/currencies/grids/CurrenciesGrid';
 import WalletGrid from '../features/currencies/grids/WalletGrid';
 import CreateInitialWalletButton from '../features/currencies/initial/CreateInitialWalletButton';
 import { getWallet } from '../store/walletSlice';
 import AuthenticationButton from '../features/authentication/AuthenticationButton';
+import { getAuth0Variables } from '../features/authentication/auth0Actions';
 
-const RootLayout = () => {
-    const { user, isAuthenticated, isLoading } = useAuth0();
+const RootView = () => {
+    const { user, isAuthenticated, isLoading } = getAuth0Variables();
     const dispatch = useDispatch();
     const {wallet} = useSelector((state) => state.wallet);
 
@@ -58,4 +58,4 @@ const RootLayout = () => {
     )
 };
 
-export default RootLayout;
+export default RootView;

@@ -5,21 +5,21 @@ import { useNavigate } from 'react-router-dom';
 import { setCurrencyToUpdate } from '../../../store/popUpCurrencySlice';
 import { createToken } from '../../authentication/tokenActions';
 
-const CurrenciesGrid = () => {
-  const {currencies} = useSelector((state) => state.currencies);
+const useMount = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const dataFetch = async () => {
-      await Promise.all([
-        dispatch(getCurrencies())
-      ]);
-    }
-
-    setInterval(() => dataFetch(), 10000)
+    dispatch(getCurrencies())
+    setInterval(() => dispatch(getCurrencies()), 10000)
   }, [])
+}
 
+const CurrenciesGrid = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const currencies = useSelector((state) => state.currencies.currencies);
+  useMount();
+
   const buyCurrency = (currency) => {
     dispatch(setCurrencyToUpdate(currency));
     navigate("/buy-currencies", {state: {token: createToken()}});

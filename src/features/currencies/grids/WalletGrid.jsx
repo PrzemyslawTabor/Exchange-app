@@ -7,28 +7,21 @@ import { setCurrencyToUpdate } from '../../../store/popUpCurrencySlice';
 import { createToken } from '../../authentication/tokenActions';
 import { calculateValue } from '../currencyOperations';
 
-const WalletGrid = ({userId}) => {
+const useMount = (userId) => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const {currencies} = useSelector((state) => state.currencies);
-  const {wallet} = useSelector((state) => state.wallet);
 
   useEffect(() => {
-    const dataFetchCurrencies = async () => {
-      await Promise.all([
-        dispatch(getCurrencies())
-      ]);
-    }
-
-    const dataFetchWallet = async () => {
-      await Promise.all([
-        dispatch(getWallet({userId: userId}))
-      ]);
-    }
-    
-    dataFetchCurrencies();
-    dataFetchWallet();
+    dispatch(getCurrencies())
+    dispatch(getWallet({userId: userId}))
   }, [])
+}
+
+const WalletGrid = ({userId}) => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const currencies = useSelector((state) => state.currencies).currencies;
+  const wallet = useSelector((state) => state.wallet.wallet);
+  useMount(userId);
 
   if (Object.keys(currencies).length > 0 && wallet !== undefined) {
     const mergeByCode = (currencies, wallet) =>
@@ -42,7 +35,7 @@ const WalletGrid = ({userId}) => {
       navigate("/sell-currencies", {state: {token: createToken()}});
     }
   
-    let data = mergeByCode(currencies.items, wallet);
+    const data = mergeByCode(currencies.items, wallet);
 
     return (
       <div className="table-responsive col-md-5">
