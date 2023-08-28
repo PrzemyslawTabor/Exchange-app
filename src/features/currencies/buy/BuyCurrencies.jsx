@@ -1,110 +1,83 @@
-import { Link, useNavigate } from "react-router-dom";
-import { connect } from "react-redux";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import classes from "./BuyCurrencies.module.css";
 import Modal from "../../../components/modal/Modal";
-import { Field, reduxForm } from "redux-form";
 import { buyCurrency } from "../../../store/walletSlice";
-import { isSpecialIncrementCurrency, calculateValue } from "../currencyOperations";
+import { calculateValue } from "../currencyOperations";
 import { getAuth0User } from "../../authentication/auth0Actions";
+import { useEffect, useState } from "react";
+import InputField from "../../../components/fields/InputField";
 
-const validate = values => {
-  const errors = {};
+const validate = (values, currency) => {
+  let errors = {};
 
   if (values.totalValue > values.availableMoney) {
-    errors.totalValue = `You cannot afford that, available money: ${values.availableMoney}`;
+    errors.totalValue = `You cannot afford that, available money: ${values.availableMoney.toFixed(2)} PLN`;
   }
 
   if (!values.units) {
     errors.units = "Field is required";
-    return errors;
   } 
   
   if (values.units <= 0) {
     errors.units = "Units number must be higher then 0";
-    return errors;
   }
 
   if (isNaN(Number(values.units))) {
     errors.units = "Units number must be an integer";
-    return errors;
   } 
   
-  if (isSpecialIncrementCurrency(values.currencyCode) && (Math.round(values.units % 100) / 100) !== 0) {
-    errors.units = "Must be an increment of 100";
-    return errors;
-  }
+  if (Math.round(values.units % currency.unit) / currency.unit !== 0) {
+    errors.units = `Must be an increment of ${currency.unit}`;
+  } 
 
   return errors;
 }
 
-const renderField = ({ input, label, type, disabled, step, meta: { touched, error } }) => (
-  <div>
-    <label>{label}</label>
-    <div>
-      <input {...input} placeholder={label} type={type} disabled={disabled} step={step}/>
-      {touched && (error && <span>{error}</span>)}
-    </div>
-  </div>
-)
-
-function BuyCurrencies(props) {
-  const {
-    handleSubmit,
-    currencyName,
-    initialValues,
-    change,
-  } = props
-
+function BuyCurrencies() {
   const navigate = useNavigate();
   const user = getAuth0User();
+  const location = useLocation();
+  const dispatch = useDispatch();
+  const currency = location.state.currency;
+  const availableMoney = useSelector((state) => state.wallet.wallet.availableMoney);
+  const [errors, setErrors] = useState({});
+  const [inputFields, setInputFields] = useState({
+    sellPrice: currency.sellPrice,
+    units: currency.unit,
+    totalValue: calculateValue(currency.unit, currency.sellPrice, currency.unit),
+    currencyCode: currency.code,
+    availableMoney: availableMoney,
+  });
 
-  const submitBuy = (values, dispatch) => {
-    dispatch(buyCurrency({values: values, userId: user.sub}));
-    navigate("/");
+  const handleChange = (e) => {
+    setInputFields({ ...inputFields, [e.target.name]: e.target.value, totalValue: calculateValue(e.target.value, currency.sellPrice, currency.unit)});
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault()
+    dispatch(buyCurrency({values: inputFields, userId: user.sub}));
+    navigate("..");
   }
 
-  function changeTotalValue(event) {
-    change('totalValue', calculateValue(event.target.value, initialValues.sellPrice, initialValues.units));
-  }
+  useEffect(() => {
+    setErrors(validate(inputFields, currency));  
+  }, [inputFields]);
 
   return (
-    <Modal redirect="/">
-      <form onSubmit={handleSubmit(submitBuy)} className={classes.form}>
-        <h5>{currencyName}</h5>
-        <Field name="currencyCode" component="input" type="hidden"/>
-        <Field name="availableMoney" component="input" type="hidden"/>
-        <Field label="Sell price" name="sellPrice" component={renderField} type="number" disabled={true} />
-        <Field label="Units" name="units" component={renderField} type="number" disabled={false} onChange={changeTotalValue} 
-              step={initialValues.units}/>
-        <Field label="Total value" name="totalValue" component={renderField} type="number" disabled={true} />
+    <Modal redirect="..">
+      <form onSubmit={handleSubmit} className={classes.form}>
+        <h5>{currency.name}</h5>
+        <InputField label="Sell Price" name="sellPrice" type="number" value={currency.sellPrice.toFixed(2)} disabled={true} />
+        <InputField label="Units" name="units" type="number" value={inputFields.units} step={currency.unit} onChange={handleChange} error={errors.units} />
+        <InputField label="Total value" name="totalValue" type="number" value={inputFields.totalValue} disabled={true} error={errors.totalValue} />
         <p className="mt-2">
           <Link to="/" type="button" className="btn btn-outline-lightt">Cancel</Link>  
-          <button className="btn btn-secondary">Submit</button>  
+          <button className="btn btn-secondary" disabled={Object.keys(errors).length > 0}>Submit</button>  
         </p>
       </form>
     </Modal>
   );
 }
 
-function mapStateToProps(state) {
-  const popUpCurrency = state.popUpCurrency.popUpCurrency;
-
-  return {
-    initialValues: {
-      sellPrice: popUpCurrency.sellPrice.toFixed(2),
-      units: popUpCurrency.unit,
-      currencyCode: popUpCurrency.code,
-      totalValue: calculateValue(popUpCurrency.unit, popUpCurrency.sellPrice, popUpCurrency.unit),
-      availableMoney: state.wallet.wallet.availableMoney
-    },
-    currencyName: popUpCurrency.name,
-  }
-}
-
-BuyCurrencies = reduxForm({
-  form: "buy-currencies",
-  enableReinitialize: true,
-  validate
-})(BuyCurrencies)
-
-export default connect(mapStateToProps)(BuyCurrencies)
+export default BuyCurrencies

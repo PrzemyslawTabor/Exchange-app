@@ -9,6 +9,7 @@ import Providers from "./features/authentication/Providers";
 
 import 'bootstrap/dist/css/bootstrap.css';
 
+
 const router = createBrowserRouter([
   {
     path: "/",

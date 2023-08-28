@@ -51,30 +51,42 @@ const walletSlice = createSlice({
             CZK: 0,
             GBP: 0,
         },
-    },
-    reducers: {
-        testGetWallet: (state, action) => {
-            state.wallet = action.payload;
-        }
+        isLoading: true,
+        isError: false
     },
     extraReducers: (builder) => {
         builder.addCase(getWallet.fulfilled, (state, action) => {
-            if (action.payload !== null) {
+            if (action.payload != null) {
                 state.wallet = action.payload
             }
-        });
+            state.isLoading = false;
+        })
+        builder.addCase(getWallet.rejected, (state, action) => {
+            state.isError = true;
+        })
         builder.addCase(createWallet.fulfilled, (state, action) => {
-            state.wallet = action.payload
+            state.isLoading = false;
+            state.wallet = action.payload.wallet
+        })
+        builder.addCase(createWallet.rejected, (state, action) => {
+            state.isError = true;
         })
         builder.addCase(buyCurrency.fulfilled, (state, action) => {
+            state.isLoading = false;
             state.wallet = action.payload.wallet
         })
+        builder.addCase(buyCurrency.rejected, (state, action) => {
+            state.isError = true;
+        })
         builder.addCase(sellCurrency.fulfilled, (state, action) => {
+            state.isLoading = false;
             state.wallet = action.payload.wallet
+        })
+        builder.addCase(sellCurrency.rejected, (state, action) => {
+            state.isError = true;
         })
         .addDefaultCase((state, action) => {})
     },
 })
 
-export const {testGetWallet} = walletSlice.actions
 export default walletSlice.reducer

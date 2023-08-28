@@ -7,29 +7,22 @@ export const getCurrencies = createAsyncThunk("currencies/getCurrencies", async 
     );
 })
 
-export const isSpecialIncrementCurrencyTest = (code) => {
-    if (typeof(state) === 'undefined' && state == null) {
-        console.log("test");
-        getCurrencies();
-    }
-}
-
 const currenciesSlice = createSlice({
     name: "currencies",
     initialState: {
         currencies: {},
-    },
-    reducers: {
-        testGetCurrencies: (state, action) => {
-            state.currencies = action.payload;
-        },
+        isLoading: true,
+        isError: false,
     },
     extraReducers: (builder) => {
         builder.addCase(getCurrencies.fulfilled, (state, action) => {
             state.currencies = action.payload
+            state.isLoading = false;
+        })
+        builder.addCase(getCurrencies.rejected, (state, action) => {
+            state.isError = true;
         })
     },
 })
 
-export const {testGetCurrencies} = currenciesSlice.actions
 export default currenciesSlice.reducer

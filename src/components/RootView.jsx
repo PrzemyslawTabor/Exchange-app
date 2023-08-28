@@ -10,7 +10,7 @@ import { getAuth0Variables } from '../features/authentication/auth0Actions';
 const RootView = () => {
     const { user, isAuthenticated, isLoading } = getAuth0Variables();
     const dispatch = useDispatch();
-    const {wallet} = useSelector((state) => state.wallet);
+    const wallet = useSelector((state) => state.wallet.wallet);
 
     useEffect(() => {
       const dataFetchWallet = async () => {
