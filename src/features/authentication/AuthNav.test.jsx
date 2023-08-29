@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { beforeEach, vi } from 'vitest';
 import { useAuth0 } from "@auth0/auth0-react";
-import NavBar from '../../src/components/NavBar';
+import AuthNav from './AuthNav';
 import { waitFor } from '@testing-library/react';
 
 vi.mock('@auth0/auth0-react')
@@ -21,7 +21,7 @@ describe('Navigation bar component, user NOT authenticated', () => {
     });
 
     test('Check for log in button', async () => {
-        render(<NavBar />);
+        render(<AuthNav />);
 
         expect(screen.getByText('Log In')).toBeInTheDocument();
     });
@@ -29,7 +29,7 @@ describe('Navigation bar component, user NOT authenticated', () => {
     test('It redirects the user to the Auth0 Universal Login page when the Log In button is pressed', async () => {
         const { loginWithRedirect } = useAuth0();
 
-        render(<NavBar />);
+        render(<AuthNav />);
         const loginElement = screen.getByText("Log In");
         loginElement.click();
 
@@ -57,13 +57,13 @@ describe('Navigation bar component, user authenticated', () => {
     });
 
     test('Check if username is on the screen', async () => {
-        render(<NavBar />);
+        render(<AuthNav />);
 
         expect(screen.getByText('John Doe')).toBeInTheDocument();
     });
 
     test('Check for log out button', async () => {
-        render(<NavBar />);
+        render(<AuthNav />);
 
         const outputElement = screen.getByText('Log Out');
         expect(outputElement).toBeInTheDocument();
@@ -71,7 +71,7 @@ describe('Navigation bar component, user authenticated', () => {
 
     test('It redirects the user to the main page when the Log uot button is pressed', async () => {
         const { logout } = useAuth0();
-        render(<NavBar />);
+        render(<AuthNav />);
 
         expect(screen.getByText('Log Out')).toBeInTheDocument();
         const button = screen.getByRole("button");

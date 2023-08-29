@@ -56,7 +56,7 @@ function CreateInitialWallet() {
   const [inputFields, setInputFields] = useState(splicedWallet);
 
   const handleChange = (e) => {
-    setInputFields({ ...inputFields, [e.target.name]: e.target.value});
+    setInputFields({ ...inputFields, [e.target.name]: e.target.valueAsNumber});
   };
 
   const handleSubmit = (event) => {

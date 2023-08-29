@@ -51,7 +51,7 @@ function SellCurrencies() {
   });
 
   const handleChange = (e) => {
-    setInputFields({ ...inputFields, [e.target.name]: e.target.value, totalValue: calculateValue(e.target.value, currency.purchasePrice, currency.unit)});
+    setInputFields({ ...inputFields, [e.target.name]: e.target.valueAsNumber, totalValue: calculateValue(e.target.value, currency.purchasePrice, currency.unit)});
   };
 
   const handleSubmit = (event) => {

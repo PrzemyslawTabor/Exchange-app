@@ -1,3 +1,4 @@
+import PropTypes from "prop-types"
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from "react-redux";
 import { getCurrencies } from '../../../store/currenciesSlice';
@@ -102,6 +103,10 @@ const WalletGrid = ({userId}) => {
       </table>
     </div>
   );    
+}
+
+WalletGrid.propTypes = {
+  userId: PropTypes.string.isRequired
 }
 
 export default WalletGrid;

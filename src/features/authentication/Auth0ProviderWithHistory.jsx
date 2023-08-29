@@ -1,3 +1,4 @@
+import PropTypes from "prop-types"
 import React from 'react';
 import { Auth0Provider } from '@auth0/auth0-react';
 
@@ -21,5 +22,9 @@ const Auth0ProviderWithHistory = ({ children }) => {
     </Auth0Provider>
   );
 };
+
+Auth0ProviderWithHistory.propTypes = {
+  children: PropTypes.node.isRequired
+}
 
 export default Auth0ProviderWithHistory;

@@ -1,3 +1,5 @@
+import PropTypes from "prop-types"
+
 const InputField = ({ label, type, disabled, name, value, onChange, step, error}) => {
   return (
       <div>
@@ -8,6 +10,17 @@ const InputField = ({ label, type, disabled, name, value, onChange, step, error}
       </div>
     </div>
   )
+}
+
+InputField.propTypes = {
+  disabled: PropTypes.bool,
+  error: PropTypes.string,
+  label: PropTypes.string,
+  name: PropTypes.string,
+  onChange: PropTypes.func,
+  step: PropTypes.number,
+  type: PropTypes.string,
+  value: PropTypes.any
 }
 
 export default InputField;

@@ -1,14 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { RouterProvider, createBrowserRouter, Outlet } from "react-router-dom";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import BuyCurrencies from "./features/currencies/buy/BuyCurrencies";
 import SellCurrencies from "./features/currencies/sell/SellCurrencies";
 import CreateInitialWallet from "./features/currencies/initial/CreateInitialWallet";
 import ProtectedRoute from "./features/authentication/ProtectedRoute";
 import Providers from "./features/authentication/Providers";
-
 import 'bootstrap/dist/css/bootstrap.css';
-
 
 const router = createBrowserRouter([
   {

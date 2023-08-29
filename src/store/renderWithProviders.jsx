@@ -1,13 +1,13 @@
 import React from 'react'
 import { render } from '@testing-library/react'
 import { Provider } from 'react-redux'
-import { setupStore } from '../../src/store/store'
+import { setupStore } from './store'
 import { MemoryRouter as Router } from "react-router-dom";
 
 export function renderWithProviders(
   ui,
   {
-    preloadedState,
+    preloadedState = {},
     store = setupStore(preloadedState),
     ...renderOptions
   } = {}

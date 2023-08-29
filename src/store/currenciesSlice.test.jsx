@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest'
-import currenciesSlice, { getCurrencies, } from '../../src/store/currenciesSlice'
+import currenciesSlice, { getCurrencies, } from './currenciesSlice'
 import createFetchMock from 'vitest-fetch-mock';
 
 const fetchMocker = createFetchMock(vi);

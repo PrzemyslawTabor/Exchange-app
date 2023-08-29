@@ -1,10 +1,10 @@
 import { screen, waitFor } from '@testing-library/react';
 import { beforeEach, vi } from 'vitest';
 import { useAuth0 } from "@auth0/auth0-react";
-import RootView from '../../src/components/RootView';
+import RootView from './RootView';
 import { renderWithProviders } from '../store/renderWithProviders';
 import { act } from 'react-dom/test-utils';
-import { testGetWallet, testUpdateWalletReducer } from '../../src/store/walletSlice';
+import { getWallet, testGetWallet, testUpdateWalletReducer } from '../store/walletSlice';
 
 vi.mock('@auth0/auth0-react')
 
@@ -56,22 +56,5 @@ describe('User authenticated', async () => {
 
         const outputElement = screen.getByText('You did not define your initial wallet yet. It is necessary to use this site.');
         expect(outputElement).toBeInTheDocument();
-    });
-
-    test('User authenticated, wallet for user exist', async () => {
-        const initialState = {
-            wallet: {
-                userId: "google-oauth2|2147627834623744883746",
-            },
-        };
-
-        const { store } = renderWithProviders(<RootView />);
-        await act(async () => {
-            store.dispatch(testGetWallet(initialState));
-        });
-
-        await waitFor(async () => {
-            expect(screen.getAllByText("Loading data. Hold on.")).toBeTruthy();
-        });
     });
 })

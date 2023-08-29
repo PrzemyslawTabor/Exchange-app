@@ -10,7 +10,7 @@ const AuthenticationButton = () => {
       logout({
         returnTo: window.location.origin,
       })
-    }>Log out</Button>
+    }>Log Out</Button>
     : <Button type="btn-primary" onClick={() => loginWithRedirect()}>Log In</Button>;
 };
 

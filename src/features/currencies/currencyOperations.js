@@ -1,3 +1,3 @@
 export const calculateValue = (amount, unitPrice, currencyUnits) => {
-    return (unitPrice * (amount / currencyUnits)).toFixed(2);
+    return parseFloat((unitPrice * (amount / currencyUnits)).toFixed(2));
 }
