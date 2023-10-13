@@ -7,4 +7,4 @@ This is an app created as a task for self-study react package.
 2. `npm run dev` - runs the app
 3. `npm test` - runs the tests
 
-This app require another backend application that can be found here: https://git.future-processing.com/ptabor/react-exchange-app-backend
+This app require another backend application that can be found here: https://github.com/PrzemyslawTabor/Exchange-backend
